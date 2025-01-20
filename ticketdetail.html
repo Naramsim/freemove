@@ -5,6 +5,11 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta name='robots' content='noindex,nofollow' />
     <link rel="manifest" href="/freemove/manifest.json">
+    <script>
+        window.addEventListener('load', function() {
+            window.history.pushState({}, '')
+        })
+    </script>
     <style>
         .view {
             overflow: scroll !important
@@ -54037,7 +54042,7 @@ PRINT DETAILS PAGE
     </style>
 </head>
 
-<body data-animation="pushLeft" id="way" class="android cordova">
+<body style="z-index:6;" data-animation="pushLeft" id="way" class="">
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <title>OpenMove</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -54239,6 +54244,10 @@ PRINT DETAILS PAGE
         <div style="font-size: 18pt; color: #999;">
         </div>
     </div>
+    <iframe id="openmove_app" src="https://app.openmove.com" style="position:fixed; top:0; left:0; bottom:0; right:0; width:100%; height:100%; border:none; margin:0; padding:0; overflow:hidden; z-index:0;">
+        Your browser doesn't support iframes
+    </iframe>
+    <div id="login_overlay" style="height: 44px;width: 20%;position: fixed;z-index: 7;bottom: 0;left: 50%;margin-left: -10%;right: 0;"></div>
     <script>
         const now = new Date()
         const day = new Intl.DateTimeFormat("it-IT", {day: '2-digit'}).format(now)
@@ -54308,7 +54317,23 @@ PRINT DETAILS PAGE
         document.querySelector('#cancel').addEventListener("click", function (e) {
             document.querySelector('#popups').style.display = 'none'
         })
-        if('serviceWorker' in navigator) {
+        document.querySelector('#tabbar').style['z-index'] = 1
+        document.querySelector('#tabbar > a').style['z-index'] = 1
+
+        if (true) {
+            document.querySelectorAll('#tabbar > a').forEach(footer_button => {
+                //footer_button.href = 'openmove://'
+                //footer_button.href = './iframe.html'
+                footer_button.removeAttribute('href')
+                footer_button.addEventListener("click", function (e) {
+                    document.querySelector('#openmove_app').style['z-index'] = 5
+                })
+            })
+        }
+        document.querySelector('#login_overlay').addEventListener("click", function (e) {
+            document.querySelector('#openmove_app').style['z-index'] = 0
+        })
+        if('serviceWorker' in navigator && window.location.hostname === 'naramsim.github.io') {
             navigator.serviceWorker.register('/freemove/sw.js', { scope: '/freemove/' });
         }
     </script>
