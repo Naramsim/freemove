@@ -4,6 +4,7 @@
 <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta name='robots' content='noindex,nofollow' />
+    <link rel="manifest" href="/manifest.json">
     <style>
         .view {
             overflow: scroll !important
@@ -54307,6 +54308,9 @@ PRINT DETAILS PAGE
         document.querySelector('#cancel').addEventListener("click", function (e) {
             document.querySelector('#popups').style.display = 'none'
         })
+        if('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js', { scope: '/' });
+        }
     </script>
 </body>
 </html>
