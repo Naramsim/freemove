@@ -3,7 +3,7 @@
   "name": "Freemove",
   "short_name": "Freemove",
   "description": "Freemove",
-  "start_url": "/ticketdetail.html",
+  "start_url": "/freemove/ticketdetail.html",
   "background_color": "#2f3d58",
   "theme_color": "#2f3d58",
   "orientation": "any",
