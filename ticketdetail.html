@@ -54391,7 +54391,7 @@ PRINT DETAILS PAGE
 
         document.querySelector('#login_overlay').addEventListener("click", function (e) {
             document.querySelector('#openmove_app').style['z-index'] = 0
-            document.querySelector('#login_overlay').classList.add('login_overlay')
+            document.querySelector('#login_overlay').classList.remove('login_overlay_gray')
         })
         if('serviceWorker' in navigator && window.location.hostname === 'naramsim.github.io') {
             navigator.serviceWorker.register('/freemove/sw.js', { scope: '/freemove/' });
