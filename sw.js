@@ -16,9 +16,7 @@ self.addEventListener('fetch', event => {
 
     // Get the resource from the cache.
     const cachedResponse = await cache.match(event.request);
-    if (cachedResponse) {
-      return cachedResponse;
-    } else {
+
         try {
           // If the resource was not in the cache, try the network.
           const fetchResponse = await fetch(event.request);
@@ -29,6 +27,6 @@ self.addEventListener('fetch', event => {
         } catch (e) {
           // The network failed.
         }
-    }
+
   })());
 });

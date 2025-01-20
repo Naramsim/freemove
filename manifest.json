@@ -10,7 +10,7 @@
   "display": "standalone",
   "icons": [
       {
-          "src": "/logo.webp",
+          "src": "/freemove/logo.webp",
           "sizes": "512x512"
       }
   ]
