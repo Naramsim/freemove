@@ -11,6 +11,47 @@
         })
     </script>
     <style>
+        .login_overlay {
+            border-top: 1px solid #4faabf;
+            line-height: 32px;
+            background-color: #fff;
+            color: #4faabf !important;
+            margin-top: -1px;
+        }
+        .login_overlay:before {
+            margin-top: 6%;
+            font-size: 25px !important;
+            display: block;
+            width: 100%;
+            top: 50%;
+            height: 100%;
+            text-align: center;
+            content: "\F518";
+            font: normal normal normal 24px / 1 "Material Design Icons";
+        }
+        .login_overlay_gray {
+            border-top: 1px solid #bbb;
+            color: #666d6d !important;
+        }
+        #login_overlay > .tabbarBadge {
+            display: none;
+        }
+        .login_overlay > .tabbarBadge {
+            top: 0px;
+            position: absolute;
+            background-color: #EA5959;
+            padding: 4px;
+            border-radius: 50%;
+            top: 1px;
+            width: 18px;
+            height: 18px;
+            color: #fff;
+            line-height: 11px;
+            left: calc(50% + 5px);
+            font-size: 10px;
+            text-align: center;
+            display: block !important;
+        }
         .view {
             overflow: scroll !important
         }
@@ -54247,17 +54288,27 @@ PRINT DETAILS PAGE
     <iframe id="openmove_app" src="https://app.openmove.com" style="position:fixed; top:0; left:0; bottom:0; right:0; width:100%; height:100%; border:none; margin:0; padding:0; overflow:hidden; z-index:0;">
         Your browser doesn't support iframes
     </iframe>
-    <div id="login_overlay" style="height: 44px;width: 20%;position: fixed;z-index: 7;bottom: 0;left: 50%;margin-left: -10%;right: 0;"></div>
+    <div id="login_overlay" class="login_overlay" style="height:44px;width:20%;position:fixed;z-index:7;bottom:0;left:50%;margin-left:-10%;right:0;">
+        <span class="tabbarBadge">1</span>
+    </div>
     <script>
-        const now = new Date()
-        const day = new Intl.DateTimeFormat("it-IT", {day: '2-digit'}).format(now)
-        const month = new Intl.DateTimeFormat("it-IT", {month: '2-digit'}).format(now)
-        const year = now.getFullYear().toString().slice(-2)
-        const hour = now.getHours()
-        const minute = now.getMinutes()
-        let tenMinAgo = new Date()
+        const previous_ticket_validation_time = new Date(localStorage.getItem("ticket_buy_time"))
+        let validation_time = new Date()
+        if (previous_ticket_validation_time) {
+            const two_hour = 60 * 60 * 1000 * 2;
+            if (previous_ticket_validation_time > (validation_time - two_hour)) {
+                validation_time = previous_ticket_validation_time
+            }
+        }
+        const day = new Intl.DateTimeFormat("it-IT", {day: '2-digit'}).format(validation_time)
+        const month = new Intl.DateTimeFormat("it-IT", {month: '2-digit'}).format(validation_time)
+        const year = validation_time.getFullYear().toString().slice(-2)
+        const hour = `0${validation_time.getHours()}`.slice(-2)
+        const minute = `0${validation_time.getMinutes()}`.slice(-2)
+        let tenMinAgo = new Date(validation_time)
         tenMinAgo.setMinutes(minute - 10)
-        tenMinAgo = tenMinAgo.getMinutes()
+        let tenMinAgoHour = `0${tenMinAgo.getHours()}`.slice(-2)
+        tenMinAgo = `0${tenMinAgo.getMinutes()}`.slice(-2)
         porto0.innerHTML = `Validato: ${day}/${month}/${year} ${hour}:${minute} - 1738 - A -`
         porto1.innerHTML = `${day}/${month}/${year} ${hour}:${minute} - 1738 - A -`
         porto2.innerHTML = `${day}/${month}/${year} ${hour}:${minute} - 1738 - A -`
@@ -54266,19 +54317,23 @@ PRINT DETAILS PAGE
         let fromP = localStorage.getItem('fromP')
         let toP = localStorage.getItem('toP')
         let viaP = localStorage.getItem('viaP')
+        let amountP = localStorage.getItem('amountP')
         let themeP = localStorage.getItem('themeP')
-        let price = priceP ? priceP : 1.15
+        let amount = amountP ? amountP : 1
+        let price = priceP ? (priceP*amount).toFixed(2) : 1.15
         let from = fromP ? fromP : 'Folgaria'
         let to = toP ? toP : 'Calliano'
         let via = viaP ? viaP.toUpperCase() : ''
+
         document.querySelector('span.price_EUR').innerHTML = price
         document.querySelector('.origin-dest-names .country').innerHTML = from.toUpperCase()
+        document.querySelector('.detail-cont > p.text').innerHTML = `<p class="text"><span class="price_EUR">${price}</span>&nbsp;&nbsp;&nbsp;<i class="fa fa-user"></i> ${amount}</p>`
         document.querySelector('.origin-dest-names .name').innerHTML = to.toUpperCase()
         if (via) {
             document.querySelector('.origin-dest-names .routing').innerHTML = `(passando per ${via.toUpperCase()})`
         }
 
-        document.querySelector('div.ticketDetailsView > ul:nth-child(4) > li:nth-child(1) span').innerHTML = `${day}/${month}/${year} ${hour}:${tenMinAgo}`
+        document.querySelector('div.ticketDetailsView > ul:nth-child(4) > li:nth-child(1) span').innerHTML = `${day}/${month}/${year} ${tenMinAgoHour}:${tenMinAgo}`
         document.querySelector('div.ticketDetailsView > ul:nth-child(4) > li:nth-child(2) > span').innerHTML = from
         document.querySelector('div.ticketDetailsView > ul:nth-child(4) > li:nth-child(3) > span').innerHTML = to
         document.querySelector('div.ticketDetailsView > ul:nth-child(4) > li:nth-child(5) > span').innerHTML = price
@@ -54289,8 +54344,9 @@ PRINT DETAILS PAGE
         document.querySelector('div.ticketDetailsView > ul:nth-child(7) > li:nth-child(1) > span').addEventListener("click", function (e) {
             let fromP = prompt('From')
             let toP = prompt('To')
-            let viaP = prompt('Via')
-            let priceP = prompt('Price')
+            let viaP = prompt('Through')
+            let priceP = prompt('Single price')
+            let amountP = prompt('How many')
             let themeP = confirm('Theme. Light OK/Dark Cancel')
 
             if (themeP) {
@@ -54304,7 +54360,10 @@ PRINT DETAILS PAGE
             localStorage.setItem("viaP", viaP);
             localStorage.setItem("priceP", priceP);
             localStorage.setItem("themeP", themeP);
+            localStorage.setItem("amountP", amountP);
         });
+
+        localStorage.setItem("ticket_buy_time", validation_time)
 
         document.querySelector('div.ticketDetailsView > div.qr-box-detail > div > center > a > img').addEventListener("click", function (e) {
             document.querySelector('#popups').style.display = 'block'
@@ -54320,18 +54379,19 @@ PRINT DETAILS PAGE
         document.querySelector('#tabbar').style['z-index'] = 1
         document.querySelector('#tabbar > a').style['z-index'] = 1
 
-        if (true) {
-            document.querySelectorAll('#tabbar > a').forEach(footer_button => {
-                //footer_button.href = 'openmove://'
-                //footer_button.href = './iframe.html'
-                footer_button.removeAttribute('href')
-                footer_button.addEventListener("click", function (e) {
-                    document.querySelector('#openmove_app').style['z-index'] = 5
-                })
+        document.querySelectorAll('#tabbar > a').forEach(footer_button => {
+            //footer_button.href = 'openmove://'
+            //footer_button.href = './iframe.html'
+            footer_button.removeAttribute('href')
+            footer_button.addEventListener("click", function (e) {
+                document.querySelector('#openmove_app').style['z-index'] = 5
+                document.querySelector('#login_overlay').classList.add('login_overlay_gray')
             })
-        }
+        })
+
         document.querySelector('#login_overlay').addEventListener("click", function (e) {
             document.querySelector('#openmove_app').style['z-index'] = 0
+            document.querySelector('#login_overlay').classList.add('login_overlay')
         })
         if('serviceWorker' in navigator && window.location.hostname === 'naramsim.github.io') {
             navigator.serviceWorker.register('/freemove/sw.js', { scope: '/freemove/' });
