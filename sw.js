@@ -10,23 +10,25 @@ self.addEventListener('install', event => {
   })());
 });
 
-// self.addEventListener('fetch', event => {
-//   event.respondWith((async () => {
-//     // const cache = await caches.open(CACHE_NAME);
+async function networkFirst(request) {
+  try {
+    const networkResponse = await fetch(request);
+    if (networkResponse.ok) {
+      const cache = await caches.open(CACHE_NAME);
+      cache.put(request, networkResponse.clone());
+    }
+    return networkResponse;
+  } catch (error) {
+    const cachedResponse = await caches.match(request);
+    return cachedResponse || Response.error();
+  }
+}
 
-//     // // Get the resource from the cache.
-//     // const cachedResponse = await cache.match(event.request);
-
-//     //     try {
-//     //       // If the resource was not in the cache, try the network.
-//     //       const fetchResponse = await fetch(event.request);
-
-//     //       // Save the resource in the cache and return it.
-//     //       cache.put(event.request, fetchResponse.clone());
-//     //       return fetchResponse;
-//     //     } catch (e) {
-//     //       // The network failed.
-//     //     }
-
-//   })());
-// });
+self.addEventListener('fetch', event => {
+  event.respondWith((async () => {
+    const url = new URL(event.request.url);
+    //if (url.pathname.match(/^.*ticketdetail.*/)) {
+      event.respondWith(networkFirst(event.request));
+    //}
+  })());
+});
