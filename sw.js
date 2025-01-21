@@ -26,7 +26,7 @@ async function networkFirst(request) {
 
 self.addEventListener('fetch', event => {
   event.respondWith((async () => {
-    const url = new URL(event.request.url);
+    //const url = new URL(event.request.url);
     //if (url.pathname.match(/^.*ticketdetail.*/)) {
       event.respondWith(networkFirst(event.request));
     //}
