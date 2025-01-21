@@ -12,14 +12,14 @@
     </script>
     <style>
         .login_overlay {
-            border-top: 1px solid #4faabf;
+            border-top: 2px solid #4faabf;
             line-height: 32px;
             background-color: #fff;
             color: #4faabf !important;
             margin-top: -1px;
         }
         .login_overlay:before {
-            margin-top: 6%;
+            margin-top: 7px;
             font-size: 25px !important;
             display: block;
             width: 100%;
@@ -42,7 +42,7 @@
             background-color: #EA5959;
             padding: 4px;
             border-radius: 50%;
-            top: 1px;
+            top: 0px;
             width: 18px;
             height: 18px;
             color: #fff;
@@ -54347,13 +54347,13 @@ PRINT DETAILS PAGE
             let viaP = prompt('Through')
             let priceP = prompt('Single price')
             let amountP = prompt('How many')
-            let themeP = confirm('Theme. Light OK/Dark Cancel')
+            //let themeP = confirm('Theme. Light OK/Dark Cancel')
 
-            if (themeP) {
+            /* if (themeP) {
                 themeP = 'light'
             } else {
                 themeP = 'dark'
-            }
+            } */
 
             localStorage.setItem("fromP", fromP);
             localStorage.setItem("toP", toP);
@@ -54361,6 +54361,7 @@ PRINT DETAILS PAGE
             localStorage.setItem("priceP", priceP);
             localStorage.setItem("themeP", themeP);
             localStorage.setItem("amountP", amountP);
+            window.location.reload();
         });
 
         localStorage.setItem("ticket_buy_time", validation_time)
