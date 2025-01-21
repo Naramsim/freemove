@@ -19,7 +19,7 @@
             margin-top: -1px;
         }
         .login_overlay:before {
-            margin-top: 7px;
+            margin-top: 9px;
             font-size: 25px !important;
             display: block;
             width: 100%;
@@ -54285,7 +54285,7 @@ PRINT DETAILS PAGE
         <div style="font-size: 18pt; color: #999;">
         </div>
     </div>
-    <iframe id="openmove_app" src="https://app.openmove.com" style="position:fixed; top:0; left:0; bottom:0; right:0; width:100%; height:100%; border:none; margin:0; padding:0; overflow:hidden; z-index:0;">
+    <iframe id="openmove_app" src="https://app.openmove.com/tickets" style="position:fixed; top:0; left:0; bottom:0; right:0; width:100%; height:100%; border:none; margin:0; padding:0; overflow:hidden; z-index:0;">
         Your browser doesn't support iframes
     </iframe>
     <div id="login_overlay" class="login_overlay" style="height:44px;width:20%;position:fixed;z-index:7;bottom:0;left:50%;margin-left:-10%;right:0;">
@@ -54380,6 +54380,10 @@ PRINT DETAILS PAGE
         document.querySelector('#tabbar').style['z-index'] = 1
         document.querySelector('#tabbar > a').style['z-index'] = 1
 
+        document.querySelector('#navbar > .backbutton').addEventListener("click", function (e) {
+                document.querySelector('#openmove_app').style['z-index'] = 5
+                document.querySelector('#login_overlay').classList.add('login_overlay_gray')
+            })
         document.querySelectorAll('#tabbar > a').forEach(footer_button => {
             //footer_button.href = 'openmove://'
             //footer_button.href = './iframe.html'
