@@ -54339,9 +54339,14 @@ PRINT DETAILS PAGE
         document.querySelector('div.ticketDetailsView > ul:nth-child(4) > li:nth-child(5) > span').innerHTML = price
         document.querySelector('div.ticketDetailsView > ul:nth-child(4) > li:nth-child(6) > span').innerHTML = via
         document.querySelector('div.ticketDetailsView > ul:nth-child(4) > li:nth-child(8) > span').innerHTML = `31/12/${year} - 23.59`
+        document.querySelector('div.ticketDetailsView > ul:nth-child(4) > li:nth-child(11) > span').addEventListener("contextmenu", e => {
+            e.preventDefault();
+            alert(1)
+        })
         document.querySelector('div.ticketDetailsView > ul:nth-child(4) > li:nth-child(12) > span').innerHTML = `${day}/${month}/${year} ${hour}:${minute} - 1738 - A -`
 
-        document.querySelector('div.ticketDetailsView > ul:nth-child(7) > li:nth-child(1) > span').addEventListener("click", function (e) {
+        document.querySelector('div.ticketDetailsView > ul:nth-child(7) > li:nth-child(1) > span').addEventListener("contextmenu", function (e) {
+            e.preventDefault()
             let fromP = prompt('From')
             let toP = prompt('To')
             let viaP = prompt('Through')
@@ -54355,12 +54360,12 @@ PRINT DETAILS PAGE
                 themeP = 'dark'
             } */
 
-            localStorage.setItem("fromP", fromP);
-            localStorage.setItem("toP", toP);
-            localStorage.setItem("viaP", viaP);
-            localStorage.setItem("priceP", priceP);
-            localStorage.setItem("themeP", themeP);
-            localStorage.setItem("amountP", amountP);
+            localStorage.setItem("fromP", fromP ? fromP : '');
+            localStorage.setItem("toP", toP ? toP : '');
+            localStorage.setItem("viaP", viaP ? viaP : '');
+            localStorage.setItem("priceP", priceP ? priceP : '');
+            //localStorage.setItem("themeP", themeP ? themeP : '');
+            localStorage.setItem("amountP", amountP ? amountP : '');
             window.location.reload();
         });
 
